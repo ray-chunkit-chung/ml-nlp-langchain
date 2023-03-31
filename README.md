@@ -3,6 +3,7 @@
 langchain Document Question Answering tutorial
 
 ## Reference
+
 <https://note.com/npaka/n/n716dfd26094d>
 <https://note.com/npaka/n/nb9b70619939a>
 
@@ -58,4 +59,5 @@ python -m spacy download en
 # source .env
 python src/try.py
 python src/try2.py
+python src/question2.py
 ```
