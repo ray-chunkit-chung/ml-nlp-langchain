@@ -295,6 +295,9 @@ def example4():
 
     faiss
     question and answer on a document
+
+    Document Question Answering
+    Question answering involves fetching multiple documents, and then asking a question of them. The LLM response will contain the answer to your question, based on the content of the documents.
     """
 
     # 3. 質問応答
@@ -305,6 +308,7 @@ def example4():
     text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=0)
     # text_splitter = SpacyTextSplitter(chunk_size=1000)
     texts = text_splitter.split_text(txt)
+    print(len(texts))
 
     query = "what did Putin do?"
 
@@ -322,6 +326,9 @@ def example4():
     chain_refine = load_qa_chain(OpenAI(temperature=0), chain_type="refine")
     chain = load_qa_with_sources_chain(
         OpenAI(temperature=0), chain_type="stuff")
+    
+
+    chain()
 
     # 質問応答の実行
     # res_stuff = chain_stuff.run(input_documents=docs, question=query, return_only_outputs=True)
