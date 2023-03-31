@@ -42,6 +42,10 @@ sudo make
 sudo make install
 ```
 
+```
+sudo apt install -y sqlite-devel
+```
+
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -52,4 +56,5 @@ pip install --upgrade -r requirements.txt
 ```bash
 # source .env
 python src/try.py
+python src/try2.py
 ```
