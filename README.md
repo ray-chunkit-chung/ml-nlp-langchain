@@ -7,6 +7,7 @@ langchain Document Question Answering tutorial
 <https://note.com/npaka/n/n716dfd26094d>
 <https://note.com/npaka/n/nb9b70619939a>
 <https://www.pinecone.io/learn/langchain-prompt-templates/>
+<https://learnprompting.org/docs/intermediate/chain_of_thought>
 
 ## Step by step
 
