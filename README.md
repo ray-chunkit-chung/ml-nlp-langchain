@@ -34,5 +34,9 @@ pip install --upgrade -r requirements.txt
 ```
 
 
+```bash
+# source .env
+python src/try.py
+```
 
 

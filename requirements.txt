@@ -1,1 +1,4 @@
 langchain
+openai
+python-dotenv
+PyPDF2
