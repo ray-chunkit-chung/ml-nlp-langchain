@@ -9,9 +9,13 @@ from langchain.llms import OpenAI
 
 
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter, SpacyTextSplitter
 from langchain.vectorstores.faiss import FAISS
 from langchain.docstore.document import Document
+
+
+from langchain.chains.question_answering import load_qa_chain
+
 
 
 # import langchain
@@ -23,7 +27,7 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', None)
 
 PWD = os.path.dirname(os.path.abspath(__file__))
 TXT_PATH = os.path.join(PWD, '..', 'local', 'dragonball.txt')
-
+TXT_PATH = os.path.join(PWD, '..', 'local', 'news_putin_20230331.txt')
 
 def example1():
     """
@@ -292,10 +296,38 @@ def example4():
     question and answer on a document
     """
 
-    with open("dragonball.txt") as f:
-        dragonball_txt = f.read()
+    # 3. 質問応答
+
+    # 3-1. 関連するチャンクの準備
+    with open(TXT_PATH) as f:
+        txt = f.read()
     text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=0)
-    texts = text_splitter.split_text(dragonball_txt)
+    # text_splitter = SpacyTextSplitter(chunk_size=1000)
+    texts = text_splitter.split_text(txt)
+
+    query = "what did Putin do?"
+
+    # 関連するチャンクの抽出
+    embeddings = OpenAIEmbeddings()
+    docsearch = FAISS.from_texts(texts, embeddings)
+    docs = docsearch.similarity_search(query)
+
+    # print(docs)
+
+    # stuffのload_qa_chainを準備
+    chain_stuff = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
+    chain_refine = load_qa_chain(OpenAI(temperature=0), chain_type="refine")
+
+    # 質問応答の実行
+    res_stuff = chain_stuff.run(input_documents=docs, question=query, return_only_outputs=True)  
+    print("res_stuff:")
+    print("。\n".join(res_stuff.split("。")))
+
+
+    res_refine = chain_refine.run(input_documents=docs, question=query)
+    print("res_refine:")
+    print("。\n".join(res_refine.split("。")))
+
 
 
 if __name__ == "__main__":
