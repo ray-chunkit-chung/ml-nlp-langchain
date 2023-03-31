@@ -55,35 +55,12 @@ def read_pdf():
         reader = PdfReader(PDF_PATH)
         number_of_pages = len(reader.pages)
         page = reader.pages[0]
-        text = page.extract_text()
+        text = '\n'.join([page.extract_text() for page in reader.pages])
 
-        print(number_of_pages)
-        print(page)
+        # print(page)
         print(text)
-
-        # Loop through each page in the PDF file
-        # for page_num in range(pdf_reader.getNumPages()):
-        #     # Get the page object for the current page
-        #     page = pdf_reader.getPage(page_num)
-
-        # Add the page to the Document object
-        # document.addPage(page)
-
-
-# Set up the URL and payload for the POST request
-# url = "https://example.com/api/endpoint"
-# payload = {"key1": "value1", "key2": "value2"}
-
-# # Make the POST request
-# response = requests.post(url, data=payload)
-
-# # Check the status code of the response
-# if response.status_code == 200:
-#     print("POST request successful")
-# else:
-#     print("POST request failed with status code:", response.status_code)
-
-
+        print(number_of_pages)
+        print(len(text))
 
 
 def main():
@@ -91,14 +68,11 @@ def main():
     # print(test)
     # print(embeddings)
 
-    # read_pdf()
+    read_pdf()
 
-    index = langchain()
-
-    query = "What did the president say about Ketanji Brown Jackson"
-    index.query(query)
-
-
+    # index = langchain()
+    # query = "What did the president say about Ketanji Brown Jackson"
+    # index.query(query)
 
 
 if __name__ == '__main__':

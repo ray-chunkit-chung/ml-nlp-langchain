@@ -15,7 +15,7 @@ from langchain.docstore.document import Document
 
 
 from langchain.chains.question_answering import load_qa_chain
-
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 
 
 # import langchain
@@ -28,6 +28,7 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', None)
 PWD = os.path.dirname(os.path.abspath(__file__))
 TXT_PATH = os.path.join(PWD, '..', 'local', 'dragonball.txt')
 TXT_PATH = os.path.join(PWD, '..', 'local', 'news_putin_20230331.txt')
+
 
 def example1():
     """
@@ -309,7 +310,9 @@ def example4():
 
     # 関連するチャンクの抽出
     embeddings = OpenAIEmbeddings()
-    docsearch = FAISS.from_texts(texts, embeddings)
+    # docsearch = FAISS.from_texts(texts, embeddings)
+    docsearch = FAISS.from_texts(texts, embeddings, metadatas=[
+                                 {"source": i} for i in range(len(texts))])
     docs = docsearch.similarity_search(query)
 
     # print(docs)
@@ -317,17 +320,21 @@ def example4():
     # stuffのload_qa_chainを準備
     chain_stuff = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
     chain_refine = load_qa_chain(OpenAI(temperature=0), chain_type="refine")
+    chain = load_qa_with_sources_chain(
+        OpenAI(temperature=0), chain_type="stuff")
 
     # 質問応答の実行
-    res_stuff = chain_stuff.run(input_documents=docs, question=query, return_only_outputs=True)  
-    print("res_stuff:")
-    print("。\n".join(res_stuff.split("。")))
+    # res_stuff = chain_stuff.run(input_documents=docs, question=query, return_only_outputs=True)
+    # print("res_stuff:")
+    # print("。\n".join(res_stuff.split(".")))
 
+    # res_refine = chain_refine.run(input_documents=docs, question=query)
+    # print("res_refine:")
+    # print("。\n".join(res_refine.split(".")))
 
-    res_refine = chain_refine.run(input_documents=docs, question=query)
-    print("res_refine:")
-    print("。\n".join(res_refine.split("。")))
-
+    response = chain.run(input_documents=docs, question=query)
+    print("response:")
+    print("。\n".join(response.split(".")))
 
 
 if __name__ == "__main__":
