@@ -1,4 +1,4 @@
-# harmful-langchain
+# langchain
 
 langchain Document Question Answering tutorial
 
